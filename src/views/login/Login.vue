@@ -1,12 +1,10 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
+import MenuLogin from '@/components/Menu/MenuLogin.vue';
 </script>
 <template>
-  <v-app>
-    
-  </v-app>
+  <menu-login></menu-login>
 </template>
 <style scoped lang="scss">
-h1 {
-  color: #fff;
-}
+
 </style>
