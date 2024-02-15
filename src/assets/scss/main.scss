@@ -1,0 +1,33 @@
+@font-face {
+    font-family: "Spectral-Light";
+    src: url("../fonts/Spectral-Light.ttf") format("opentype");
+  }
+  
+  @font-face {
+    font-family: "Spectral-Regular";
+    src: url("../fonts/Spectral-Regular.ttf") format("opentype");
+  }
+  
+  @font-face {
+    font-family: "Spectral-Medium";
+    src: url("../fonts/Spectral-Medium.ttf") format("opentype");
+  }
+
+  @font-face {
+    font-family: "Spectral-Semi-Bold";
+    src: url("../fonts/Spectral-SemiBold.ttf");
+  }
+  
+  @font-face {
+    font-family: "Spectral-Bold";
+    src: url("../fonts/Spectral-Bold.ttf") format("opentype");
+  }
+  
+  @font-face {
+    font-family: "DINPro-Black";
+    src: url("../fonts/Spectral-ExtraBold.ttf") format("opentype");
+  }
+  
+  * {
+    font-family: Spectral-Regular, Georgia
+  }

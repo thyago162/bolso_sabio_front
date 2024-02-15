@@ -9,6 +9,8 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js"),
     },
   });
+  win.maximize()
+  win.show()
 
   win.loadFile("dist/index.html");
 }
