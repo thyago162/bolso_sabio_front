@@ -12,7 +12,7 @@
     </template>
     <template v-slot:append>
       <v-btn to="/tipo-investimento">Tipos investimentos</v-btn>
-      <v-btn to="">Usuários</v-btn>
+      <v-btn to="/user">Usuários</v-btn>
       <v-btn to="/dashboard">Dashboard</v-btn>
       <v-btn to="">Sair</v-btn>
     </template>

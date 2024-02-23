@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import TipoInvestimentoVue from '@/views/auth/adm/TipoInvestimento/TipoInvestimento.vue'
 import DashboardAdminVue from '@/views/auth/adm/Dashboard/DashboardAdmin.vue'
+import User from '@/views/auth/adm/User/User.vue'
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -35,6 +36,11 @@ const router = createRouter({
           path: '/dashboard',
           name: 'dashboard-admin',
           component: DashboardAdminVue
+        },
+        {
+          path: '/user',
+          name: 'user',
+          component: User
         }
       ]
     }
