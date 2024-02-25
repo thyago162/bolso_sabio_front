@@ -1,46 +1,11 @@
 <script setup lang="ts">
 import { ref, onBeforeMount, nextTick, computed, type ComputedRef, watch  } from 'vue';
+import {headers} from '@/composables/User/User'
 import { get } from '@/services/api'
+import FormUser from '@/components/Forms/FormUser.vue';
 
 const loading = ref(false)
 const itemsPerPage = ref()
-const headers = ref([
-    {
-        title: 'ID',
-        aling: 'start',
-        sortable: true,
-        key: 'id'
-    },
-    {
-        title: 'NOME',
-        aling: 'start',
-        sortable: false,
-        key: 'nome_completo'
-    },
-    {
-        title: 'EMAIL',
-        aling: 'start',
-        sortable: false,
-        key: 'email'
-    },
-    {
-        title: 'CPF',
-        aling: 'start',
-        sortable: false,
-        key: 'cpf'
-    },
-    {
-        title: 'TELEFONE',
-        align: 'start',
-        sortable: false,
-        key: 'telefone'
-    },
-    {
-        title: 'Actions',
-        align: 'start',
-        key: 'actions'
-    }
-])
 const user = ref()
 const url = 'users'
 const conf_inicial = {
@@ -48,17 +13,17 @@ const conf_inicial = {
     per_page: 10,
     sort: [{ key: 'id', order: 'asc' }]
 }
-const editedIndex = ref()
+const index = ref()
 const dialog = ref()
-const dialogDelete = ref()
-const editedItem = ref({
+const dialog_delete = ref()
+const item_editado = ref({
     nome_completo: '',
     email: '',
     cpf: '',
     telefone: '',
 })
 
-const defaultItem = ({
+const item_padrao = ({
     nome_completo: '',
     email: '',
     cpf: '',
@@ -87,56 +52,56 @@ onBeforeMount(async () => {
 
 function editItem(item: any) {
     console.log(item)
-    editedIndex.value = user.value.id
-    editedItem.value = Object.assign({}, item)
+    index.value = user.value.id
+    item_editado.value = Object.assign({}, item)
     dialog.value = true
 }
 
 function deleteItem(item: any) {
-    editedIndex.value = user.value.id
-    editedItem.value = Object.assign({}, item)
-    dialogDelete.value = true
+    index.value = user.value.id
+    item_editado.value = Object.assign({}, item)
+    dialog_delete.value = true
 }
 
 function deleteItemConfirm() {
-    user.value.splice(editedIndex, 1)
+    user.value.splice(index, 1)
     closeDelete()
 }
 
 function close() {
     dialog.value = false
     nextTick(() => {
-        editedItem.value = Object.assign({}, defaultItem)
-        editedIndex.value = -1
+        item_editado.value = Object.assign({}, item_padrao)
+        index.value = 0
     })
 }
 
 function closeDelete() {
-    dialogDelete.value = false
+    dialog_delete.value = false
     nextTick(() => {
-        editedItem.value = Object.assign({}, defaultItem)
-        editedIndex.value = -1
+        item_editado.value = Object.assign({}, item_padrao)
+        index.value = -1
     })
 }
 
 function save() {
-    if (editedIndex.value > -1) {
-        Object.assign(user.value[editedIndex.value], editedItem.value)
+    if (index.value > -1) {
+        Object.assign(user.value[index.value], item_editado.value)
     } else {
-        user.value.push(editedItem.value)
+        user.value.push(item_editado.value)
     }
     close()
 }
 
 const form_title: ComputedRef<string> = computed(() => {
-    return editedIndex.value === -1 ? 'New Item' : 'Edit Item'
+    return index.value === 0 ? 'Novo item' : 'Editar item'
 });
 
 watch(dialog, async (val) => {
     val || close()
 })
 
-watch(dialogDelete, async (val) => {
+watch(dialog_delete, async (val) => {
     val || closeDelete()
 })
 
@@ -148,60 +113,49 @@ watch(dialogDelete, async (val) => {
                 <v-data-table v-model:items-per-page="itemsPerPage" :headers="headers" :items-length="user.data.meta.total"
                     :items="user.data.data" :loading="loading" @update:options="loadItems">
                     <template v-slot:top>
-                        <v-toolbar flat>
+                        <v-toolbar flat color="indigo">
                             <v-toolbar-title>Usuários</v-toolbar-title>
                             <v-divider class="mx-4" inset vertical></v-divider>
                             <v-spacer></v-spacer>
                             <v-dialog v-model="dialog" max-width="500px">
                                 <template v-slot:activator="{ props }">
-                                    <v-btn color="primary" dark class="mb-2" v-bind="props">
-                                        {{ form_title }}
+                                    <v-btn class="mb-2" v-bind="props">
+                                        Novo item
                                     </v-btn>
                                 </template>
                                 <v-card>
                                     <v-card-title>
-                                        <span class="text-h5">Novo item</span>
+                                        <span class="text-h5">{{ form_title }}</span>
                                     </v-card-title>
-
                                     <v-card-text>
-                                        <v-container>
-                                            <v-row>
-                                                <v-col cols="12" sm="6" md="4">
-                                                    <v-text-field v-model="editedItem.nome_completo"
-                                                        label="Nome completo"></v-text-field>
-                                                </v-col>
-                                                <v-col cols="12" sm="6" md="4">
-                                                    <v-text-field v-model="editedItem.cpf"
-                                                        label="Cpf"></v-text-field>
-                                                </v-col>
-                                                <v-col cols="12" sm="6" md="4">
-                                                    <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
-                                                </v-col>
-                                                <v-col cols="12" sm="6" md="4">
-                                                    <v-text-field v-model="editedItem.telefone"
-                                                        label="Telefone"></v-text-field>
-                                                </v-col>
-                                            </v-row>
-                                        </v-container>
+                                        <form-user 
+                                            v-model:nome_completo="item_editado.nome_completo" 
+                                            v-model:email="item_editado.email"
+                                            v-model:cpf="item_editado.cpf"
+                                            v-model:telefone="item_editado.telefone"
+                                        />
                                     </v-card-text>
 
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
                                         <v-btn color="blue-darken-1" variant="text" @click="close">
-                                            Cancel
+                                            Cancelar
                                         </v-btn>
-                                        <v-btn color="blue-darken-1" variant="text" @click="save">
-                                            Save
+                                        <v-btn color="blue-darken-1" variant="text" @click="save" v-if="index == 0">
+                                            Salvar
+                                        </v-btn>
+                                        <v-btn color="blue-darken-1" variant="text" @click="save" v-else>
+                                            Atualizar
                                         </v-btn>
                                     </v-card-actions>
                                 </v-card>
                             </v-dialog>
-                            <v-dialog v-model="dialogDelete" max-width="500px">
+                            <v-dialog v-model="dialog_delete" max-width="500px">
                                 <v-card>
-                                    <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+                                    <v-card-title class="text-h5">Tem certeza que deseja remover?</v-card-title>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
-                                        <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Cancel</v-btn>
+                                        <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Cancelar</v-btn>
                                         <v-btn color="blue-darken-1" variant="text" @click="deleteItemConfirm">OK</v-btn>
                                         <v-spacer></v-spacer>
                                     </v-card-actions>
@@ -209,7 +163,7 @@ watch(dialogDelete, async (val) => {
                             </v-dialog>
                         </v-toolbar>
                     </template>
-                    <template v-slot:item.actions="{ item }">
+                    <template v-slot:[`item.actions`]="{ item }">
                         <v-icon size="small" class="me-2" @click="editItem(item)">
                             mdi-pencil
                         </v-icon>
@@ -218,7 +172,7 @@ watch(dialogDelete, async (val) => {
                         </v-icon>
                     </template>
                     <template v-slot:no-data>
-                        <v-btn color="primary" @click="initialize">
+                        <v-btn color="primary" >
                             Reset
                         </v-btn>
                     </template>

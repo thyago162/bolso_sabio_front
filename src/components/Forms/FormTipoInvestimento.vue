@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const nome = defineModel('nome')
-const tipo_renda = defineModel('tipoRenda')
+const tipo_renda:any = defineModel('tipoRenda')
 </script>
 <template>
     <v-form>

@@ -15,6 +15,7 @@ export const useTipoInvestimentoStore = defineStore('tipoInvestimento', {
 
     actions: {
         setTiposInvestimento(payload: any) {
+            console.log(payload)
             this.tipo_investimento = payload
         }
     }

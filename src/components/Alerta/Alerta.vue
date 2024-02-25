@@ -25,5 +25,7 @@ const props = defineProps({
         :icon="props.icone" 
         :title="props.title"
         :text="props.text"
+        closable
+        close-label="Fechar"
     ></v-alert>
 </template>
