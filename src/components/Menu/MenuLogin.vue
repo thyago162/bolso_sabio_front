@@ -12,7 +12,7 @@
     </template>
     <template v-slot:append>
       <v-btn to="/login">Login</v-btn>
-      <v-btn to="/cadastro">Cadastre-se</v-btn>
+      <v-btn to="/cadastro">Cadastro</v-btn>
     </template>
   </v-app-bar>
 </template>

@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import {RouterLink} from 'vue-router'
+import {get} from "@/services/api"
 
 const email = ref('')
 const password = ref('')
+
+function login() {
+  get('oauth/token', {
+    
+  })
+}
 
 </script>
 
@@ -30,7 +37,7 @@ const password = ref('')
         hide-details
         type="password"
       ></v-text-field>
-      <v-btn type="submit" color="indigo" variant="flat" block class="mt-4">Entrar</v-btn>
+      <v-btn type="submit" color="indigo" variant="flat" block class="mt-4" @click="login">Entrar</v-btn>
       <router-link to="/">Esqueceu a senha?</router-link>
     </v-form>
   </div>

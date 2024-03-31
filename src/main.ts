@@ -1,5 +1,7 @@
 import './assets/main.css'
 import './assets/scss/main.scss'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
@@ -14,6 +16,8 @@ import './plugins/vuetify'
 
 
 const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
 const vuetify = createVuetify({
     components,
     directives,

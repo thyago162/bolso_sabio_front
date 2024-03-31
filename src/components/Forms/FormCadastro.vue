@@ -37,11 +37,11 @@ async function realizarCadastro() {
     email: form.value.email,
     ddd: form.value.ddd,
     telefone: form.value.telefone,
-    password_confirmed: form.value.password,
-    password_confirmed_confirmation: form.value.password_confirmed
+    password: form.value.password,
+    password_confirmation: form.value.password_confirmed
   }
   
-  const response = await cadastrar('cadastrar', payload)
+  const response = await cadastrar('api/cadastrar', payload)
   if (response.status >= 400) {
     color.value = 'error'
     icon.value = '$error'

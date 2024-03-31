@@ -1,7 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import TipoInvestimentoVue from '@/views/auth/adm/TipoInvestimento/TipoInvestimento.vue'
-import DashboardAdminVue from '@/views/auth/adm/Dashboard/DashboardAdmin.vue'
-import User from '@/views/auth/adm/User/User.vue'
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -22,29 +19,25 @@ const router = createRouter({
       component: () => import("@/views/login/Cadastro.vue")
     },
     {
-      path: '/admin',
-      name: 'amdin',
-      component: () => import("@/views/auth/adm/Index.vue"),
-      redirect: '/dashboard',
+      path: '/auth',
+      name: 'auth-index',
+      component: () => import("@/views/auth/Index.vue"),
+      redirect: {name: 'investimentos'},
       children: [
         {
-          path: '/tipo-investimento',
-          name: 'tipo-investimento',
-          component: TipoInvestimentoVue
+          path: '/auth/investimentos',
+          name: 'investimentos',
+          component: () => import("@/views/auth/investimento/Investimentos.vue")
         },
         {
-          path: '/dashboard',
-          name: 'dashboard-admin',
-          component: DashboardAdminVue
-        },
-        {
-          path: '/user',
-          name: 'user',
-          component: User
+          path: '/auth/resumo-negociacao',
+          name: 'resumo-negociacao',
+          component: () => import("@/views/auth/resumo_negociacao/ResumoNegociacao.vue")
         }
       ]
     }
   ]
 })
+
 
 export default router

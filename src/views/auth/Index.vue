@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import MenuApp from '@/components/Menu/MenuApp.vue'
+import MenuLateral from '@/components/Menu/MenuApp.vue'
 import {RouterView } from 'vue-router'
 </script>
 <template>
-    <menu-app></menu-app>
+    <menu-lateral></menu-lateral>
     <router-view></router-view>
 </template>

@@ -1,26 +1,23 @@
 <script setup lang="ts">
-  import {RouterLink } from 'vue-router'
 </script>
 <template>
-  <v-app-bar :elevation="2">
-    <template v-slot:prepend>
-      <v-app-bar-nav-icon>
-        <router-link to="/">
-          <img src="@/assets/images/LogoSVG.svg" alt="logo" />
-        </router-link>
-      </v-app-bar-nav-icon>
-    </template>
-    <template v-slot:append>
-      <v-btn to="/tipo-investimento">Tipos investimentos</v-btn>
-      <v-btn to="/user">Usuários</v-btn>
-      <v-btn to="/dashboard">Dashboard</v-btn>
-      <v-btn to="">Sair</v-btn>
-    </template>
-  </v-app-bar>
+    <v-navigation-drawer permanent>
+        <v-list-item>
+            <img src="@/assets/images/LogoSVG.svg" class="mt-5 mb-5" />
+        </v-list-item>
+        <v-list-item prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg" title="Thyago Lopes"></v-list-item>
+        <v-divider></v-divider>
+        <v-list-item to="/auth/investimentos" title="Investimentos"></v-list-item>
+        <v-list-item to="/auth/resumo-negociacao" title="Resumo de negociação"></v-list-item>
+        <v-list-item link title="Proventos"></v-list-item>
+        <v-list-item link title="Sair"></v-list-item>
+    </v-navigation-drawer>
 </template>
+
 <style scoped lang="scss">
 img {
-  width: 150px;
-  margin-left: 150px;
+    width: 200px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 </style>
