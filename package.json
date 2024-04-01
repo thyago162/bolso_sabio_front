@@ -15,6 +15,7 @@
     "electron:start": "electron ."
   },
   "dependencies": {
+    "@kyvg/vue3-notification": "^3.2.1",
     "axios": "^1.6.7",
     "material-design-icons-iconfont": "^6.7.0",
     "pinia": "^2.1.7",

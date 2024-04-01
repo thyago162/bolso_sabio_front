@@ -2,9 +2,7 @@ import {defineStore} from 'pinia'
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        user: {
-            nome_completo: '',
-        },
+        user: {},
         auth: {
             autenticado: false,
             token: '',
@@ -27,8 +25,11 @@ export const useAuthStore = defineStore('auth', {
 
         setAuth(auth: any) {
             this.auth.autenticado = true
-            this.auth.token = auth.token
-            this.auth.refreshToken = auth.refreshToken
+            this.auth.token = auth.access_token
+            this.auth.refreshToken = auth.refresh_token
+
+            sessionStorage.setItem('token', auth.access_token)
+            sessionStorage.setItem('autenticado', 'true')
         }
     }
 })

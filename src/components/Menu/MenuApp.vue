@@ -1,4 +1,13 @@
 <script setup lang="ts">
+import {useRouter} from 'vue-router'
+
+const router = useRouter()
+
+function sair() {
+    localStorage.removeItem('token')
+    localStorage.removeItem('autenticado')
+    router.push({name: 'auth'})
+}
 </script>
 <template>
     <v-navigation-drawer permanent>
@@ -7,10 +16,11 @@
         </v-list-item>
         <v-list-item prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg" title="Thyago Lopes"></v-list-item>
         <v-divider></v-divider>
+        <v-list-item to="/auth/carteira" title="Carteira"></v-list-item>
         <v-list-item to="/auth/investimentos" title="Investimentos"></v-list-item>
         <v-list-item to="/auth/resumo-negociacao" title="Resumo de negociação"></v-list-item>
         <v-list-item link title="Proventos"></v-list-item>
-        <v-list-item link title="Sair"></v-list-item>
+        <v-list-item link title="Sair" @click="sair"></v-list-item>
     </v-navigation-drawer>
 </template>
 

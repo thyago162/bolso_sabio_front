@@ -1,22 +1,13 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
+const autenticado = sessionStorage.getItem('autenticado')
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
       path: '/',
-      name: 'index',
-      component: () => import("@/views/Index.vue")
-    },
-    {
-      path: "/login",
-      name: "login",
-      component: () => import("@/views/login/Login.vue")
-    },
-    {
-      path: '/cadastro',
-      name: 'cadastro',
-      component: () => import("@/views/login/Cadastro.vue")
+      name: 'auth',
+      component: () => import("@/views/Auth.vue")
     },
     {
       path: '/auth',
@@ -39,5 +30,16 @@ const router = createRouter({
   ]
 })
 
+router.beforeEach(async (to, from, next) => {
+  if (
+    autenticado != 'true' &&
+    to.name !== 'auth'
+  ) {
+    // redirect the user to the login page
+    return { name: 'auth' }
+  }
+
+  next()
+})
 
 export default router

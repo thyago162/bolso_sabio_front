@@ -17,7 +17,8 @@ export async function get(url: string, params: object) {
 export async function create(url: string, payload: any) {
   return await api.post(url, payload, {
     headers: {
-      "Content-Type": "multipart/form-data"
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`
     },
   })
 }
