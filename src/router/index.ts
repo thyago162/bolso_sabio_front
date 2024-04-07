@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
-const autenticado = sessionStorage.getItem('autenticado')
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -13,12 +13,22 @@ const router = createRouter({
       path: '/auth',
       name: 'auth-index',
       component: () => import("@/views/auth/Index.vue"),
-      redirect: {name: 'investimentos'},
+      redirect: {name: 'carteira'},
       children: [
+        {
+          path: '/auth/carteira',
+          name: 'carteira',
+          component: () => import("@/views/auth/carteira/Carteira.vue")
+        },
         {
           path: '/auth/investimentos',
           name: 'investimentos',
           component: () => import("@/views/auth/investimento/Investimentos.vue")
+        },
+        {
+          path: '/auth/investimentos/:id',
+          name: 'visualizar-investimento',
+          component: () => import("@/views/auth/investimento/VisualizarInvestimento.vue")
         },
         {
           path: '/auth/resumo-negociacao',
@@ -31,11 +41,12 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  const autenticado = sessionStorage.getItem('autenticado')
+  
   if (
-    autenticado != 'true' &&
+    autenticado != 'true'  &&
     to.name !== 'auth'
   ) {
-    // redirect the user to the login page
     return { name: 'auth' }
   }
 

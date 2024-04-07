@@ -13,7 +13,15 @@ const props = defineProps({
         required: true,
         type: Number
     },
-    saldo: {
+    valor_bruto: {
+        required: true,
+        type: Number
+    },
+    valor_liquido: {
+        required: true,
+        type: Number
+    },
+    valor_aplicado: {
         required: true,
         type: Number
     },
@@ -45,10 +53,12 @@ const props = defineProps({
             </v-col>
         </v-row>
         <v-row>
-            <v-col offset="1">
+            <v-col offset="1" cols="8">
                 <v-card-text>
                     <p>Cotas: {{ qnt_adquirida }}</p>
-                    <p><b>Saldo R$ </b>{{ saldo }}</p>
+                    <p v-if="valor_aplicado > 0">Valor aplicado: R$ {{ valor_aplicado }}</p>
+                    <p>Valor bruto: R$ {{ valor_bruto }}</p>
+                    <p v-if="valor_aplicado > 0">Valor liquido: R$ {{ valor_liquido }}</p>
                 </v-card-text>
             </v-col>
             <v-col>

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
-import { login, get } from "@/services/api"
+import { login } from "@/services/api"
 import { useAuthStore } from '@/stores/auth';
+import 'vue-toast-notification/dist/theme-sugar.css';
+import notificar from "@/services/notificar"
 
 //VARIÁVEIS
 const email = ref('')
@@ -10,28 +12,22 @@ const password = ref('')
 const authStore = useAuthStore()
 const router = useRouter()
 
-
 //FUNÇÕES
 function realizarLogin() {
   login('oauth/token', {
-      grant_type:  'password',
-      client_id: '2',
-      client_secret: 'a9dGEnNdn4HHa82xr2g1s4eBRfrPvBZyLFHkWwmh',
-      username: email.value,
-      password: password.value,
+    grant_type: 'password',
+    client_id: '2',
+    client_secret: 'V11sUXcZAjyvb2dbBwph7k1yQ1MziCqeHLTuPzeQ',
+    username: email.value,
+    password: password.value,
   }).then(response => {
     authStore.setAuth(response.data)
-    usuarioAutenticado()
-  })
-}
-
-async function usuarioAutenticado() {
-  console.log(sessionStorage.getItem('token'))
-  const response = await get('api/usuario-autenticado', {})
-  if (response.status === 200) {
-    authStore.setUser(response.data)
     router.push({name: 'auth-index'})
-  }
+  }).catch(err => {
+    err.response.status === 500 ?
+    notificar('error', 'Serviço temporariamente indisponível') :
+    notificar('error', 'Usuário ou senha inválidos')
+  })
 }
 
 </script>
@@ -51,7 +47,8 @@ async function usuarioAutenticado() {
         <v-btn type="submit" color="indigo" density="comfortable" @click="realizarLogin" width="250px">Entrar</v-btn>
         <router-link to="/" class="ml-5">Esqueceu a senha?</router-link>
       </div>
-      <v-btn block class="mt-5" size="x-large" rounded="lg"  @click="$emit('chamarCadastro', 'cadastro')">CADASTRAR-SE</v-btn>
+      <v-btn block class="mt-5" size="x-large" rounded="lg"
+        @click="$emit('chamarCadastro', 'cadastro')">CADASTRAR-SE</v-btn>
     </v-form>
   </div>
 </template>
@@ -59,7 +56,7 @@ async function usuarioAutenticado() {
 <style scoped lang="scss">
 .form {
   padding: 2rem;
-  opacity : 0.7;
+  opacity: 0.7;
 
   span {
     color: white;
@@ -89,11 +86,11 @@ async function usuarioAutenticado() {
   }
 
   .logo {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        margin-top: 2%;
-    }
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 2%;
+  }
 
 }
 </style>

@@ -1,9 +1,12 @@
 import axios from 'axios'
+import { useAuthStore } from '@/stores/auth'
+import { storeToRefs } from 'pinia'
 
+const authStore = storeToRefs(useAuthStore())
+const token = sessionStorage.getItem('token')
 const api = axios.create({
   baseURL: 'http://localhost:8000/'
 })
-const token = sessionStorage.getItem('token')
 
 export async function get(url: string, params: object) {
   return await api.get(url, {

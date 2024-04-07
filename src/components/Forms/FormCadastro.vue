@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { cadastrar } from '@/services/api'
-import Alerta from '@/components/Alerta/Alerta.vue'
 import { useRouter } from 'vue-router'
+import notificar from '@/services/notificar'
 import {
   nomeCompletoRules,
   emailRules,
@@ -22,15 +22,10 @@ const form = ref({
   password_confirmed: ''
 })
 const router = useRouter()
-const color = ref('')
-const icon = ref('')
-const title = ref('')
-const text = ref('')
-const show_alert = ref(false)
 const show_pass = ref(false)
 const show_pass_confirm = ref(false)
 
-async function realizarCadastro() {
+function realizarCadastro() {
   const payload = {
     nome_completo: form.value.nome_completo,
     cpf: form.value.cpf,
@@ -41,23 +36,19 @@ async function realizarCadastro() {
     password_confirmation: form.value.password_confirmed
   }
 
-  const response = await cadastrar('api/cadastrar', payload)
-  if (response.status >= 400) {
-    color.value = 'error'
-    icon.value = '$error'
-    title.value = 'Cadastro não realizado',
-    text.value = 'Erro interno'
-    show_alert.value = true
-  } else {
-    color.value = 'success'
-    icon.value = '$success'
-    title.value = 'Cadastro realizado com sucesso',
-    text.value = 'Seu cadastro foi realizado com sucesso'
-    show_alert.value = true
-
+  cadastrar('api/cadastrar', payload)
+  .then(async () => {
+    notificar('success', 'Cadastro realizado com sucesso, você será redirecionado')
     await new Promise(r => setTimeout(r, 2000));
-    router.push({ name: 'index' })
-  }
+    window.location.href = "http://localhost:5173";
+  })
+  .catch(err => {
+    if (err.response.status === 422) {
+      notificar('error', err.response.data.message)
+    } else {
+      notificar('error', err.response.data)
+    }
+  })
 }
 
 </script>
@@ -69,7 +60,6 @@ async function realizarCadastro() {
     </div>
     <v-form class="mt-5 mx-auto" @submit.prevent="realizarCadastro()">
       <h1><span class="quadrado">C</span>adastre-se</h1>
-      <alerta v-if="show_alert" :color="color" :icone="icon" :title="title" :text="text"></alerta>
       <v-text-field v-model="form.nome_completo" :rules="nomeCompletoRules" :counter="50" label="Nome Completo" required
         class="input"></v-text-field>
 
@@ -98,7 +88,7 @@ async function realizarCadastro() {
         :append-icon="show_pass_confirm ? 'mdi-eye' : 'mdi-eye-off'" class="input"
         @click:append="show_pass_confirm = !show_pass_confirm"></v-text-field>
 
-      <v-btn type="submit" color="indigo" variant="flat" block class="mt-4">Cadastrar-se</v-btn>
+      <v-btn type="submit" size="x-large"  color="indigo" variant="flat" block class="mt-4">Cadastrar-se</v-btn>
       <div class="mt-5">
         <v-btn size="x-large" block class="mt-4" @click="$emit('chamarLogin', 'login')">Login</v-btn>
       </div>
