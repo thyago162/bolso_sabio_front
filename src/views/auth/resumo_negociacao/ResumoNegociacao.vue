@@ -12,18 +12,20 @@ const dialog_delete = ref()
 const file = ref()
 const resumo_negociacoes = ref()
 const tipo_investimentos = ref()
+const investimentos = ref()
 const anos = ref()
 const selected = ref('')
 const tab = ref(1)
 const tipo_acao = ref('compra')
 const form = ref({
   tipo_investimento_id: '',
-  nome_ativo: '',
+  investimento_id: '',
   total_comprado: 0,
   total_vendido: 0,
   qnt_cotas_comprada: 0,
   qnt_cotas_vendida: 0,
   valor_ativo: 0,
+  data_negociacao: ''
 })
 
 //functions
@@ -40,25 +42,24 @@ function buscarAnos() {
     })
 }
 
-function buscarResumoNegociacao() {
-  if (selected.value) {
-    get('api/resumo-negociacao', { ano: selected.value })
-      .then(res => {
-        resumo_negociacoes.value = res.data
-      }).catch(err => {
-        notificar('error', err.response.data)
-      })
-  }
+function buscarResumoNegociacao(ano: string) {
+  selected.value = ano
+  get('api/resumo-negociacao', { ano: selected.value })
+    .then(res => {
+      resumo_negociacoes.value = res.data
+    }).catch(err => {
+      notificar('error', err.response.data)
+    })
 }
 
 function getTipoInvestimento() {
-  get('api/tipo-investimento', {tipo_renda: 'Variável'})
-  .then(res => {
-    tipo_investimentos.value = res.data
-  })
-  .catch(err => {
-    notificar('error', err.response.data)
-  })
+  get('api/tipo-investimento', { tipo_renda: 'Variável' })
+    .then(res => {
+      tipo_investimentos.value = res.data
+    })
+    .catch(err => {
+      notificar('error', err.response.data)
+    })
 }
 
 function fechar() {
@@ -76,17 +77,17 @@ function executar() {
 
 function salvar() {
   create('api/resumo-negociacao', form.value)
-  .then(res => {
-    loading.value = false
-    dialog.value = false
-    notificar('success', 'Registro salvo com sucesso')
-  }).catch(err => {
+    .then(res => {
+      loading.value = false
+      dialog.value = false
+      notificar('success', 'Registro salvo com sucesso')
+    }).catch(err => {
       notificar('error', err.response.data)
     })
 }
 
 function importar() {
-  
+
   let formData = new FormData
   formData.append('resumo_negociacao', file.value[0], file.value[0].name)
   create('api/resumo-negociacao/importar', formData)
@@ -95,6 +96,17 @@ function importar() {
       dialog.value = false
       notificar('success', 'Importação concluída')
     }).catch(err => {
+      notificar('error', err.response.data)
+    })
+}
+
+function buscarInvestimento(tipo_investimento_id: any) {
+  form.value.tipo_investimento_id = tipo_investimento_id
+  get('api/investimentos', { tipo_exibicao: 'card', tipo_investimento_id: form.value.tipo_investimento_id })
+    .then(res => {
+      investimentos.value = res.data
+    })
+    .catch(err => {
       notificar('error', err.response.data)
     })
 }
@@ -123,23 +135,22 @@ function importar() {
                     <v-radio label="Compra" value="compra"></v-radio>
                     <v-radio label="Venda" value="venda"></v-radio>
                   </v-radio-group>
-                  <v-select 
-                    v-if="tipo_investimentos" 
-                    label="Tipos Investimentos" 
-                    :item-title="'nome'" 
-                    :item-value="'id'" 
-                    :items="tipo_investimentos" 
-                    variant="underlined"
-                    v-model="form.tipo_investimento_id"
-                  ></v-select>
-                  <v-text-field label="Nome do ativo" v-model="form.nome_ativo"></v-text-field>
-                  <section v-if="tipo_acao == 'compra'">
-                    <v-text-field label="Quantidade" v-model="form.qnt_cotas_comprada"></v-text-field>
-                    <v-text-field label="Preço de compra" v-model="form.valor_ativo"></v-text-field>
-                  </section>
-                  <section v-else>
-                    <v-text-field label="Quantidade" v-model="form.qnt_cotas_vendida"></v-text-field>
-                    <v-text-field label="Preço de venda" v-model="form.valor_ativo"></v-text-field>
+                  <v-select v-if="tipo_investimentos" label="Tipos Investimentos" :item-title="'nome'"
+                    :item-value="'id'" :items="tipo_investimentos" variant="underlined"
+                    @update:modelValue="buscarInvestimento"></v-select>
+                  <section v-if="investimentos">
+                    <v-select label="Nome do ativo" v-model="form.investimento_id" variant="underlined"
+                      :items="investimentos" :item-value="'id'" :item-title="'descricao'"></v-select>
+                    <section v-if="tipo_acao == 'compra'">
+                      <v-text-field label="Quantidade" v-model="form.qnt_cotas_comprada"></v-text-field>
+                      <v-text-field label="Preço de compra" v-model="form.valor_ativo"></v-text-field>
+                    </section>
+                    <section v-else>
+                      <v-text-field label="Quantidade" v-model="form.qnt_cotas_vendida"></v-text-field>
+                      <v-text-field label="Preço de venda" v-model="form.valor_ativo"></v-text-field>
+                    </section>
+                    <v-text-field type="date" v-model="form.data_negociacao" density="comfortable" variant="underlined"
+                      label="Data de negociação"></v-text-field>
                   </section>
                 </v-form>
               </v-card-text>
@@ -173,12 +184,9 @@ function importar() {
     <v-row class="mt-6">
       <v-col offset="2" cols="6">
         <div class="buscar-resumo">
-          <v-select :items="anos" density="comfortable" label="Selecione o ano" variant="underlined" v-model="selected"
-            :update:focused="buscarResumoNegociacao"></v-select>
+          <v-select :items="anos" density="comfortable" label="Selecione o ano" variant="underlined"
+            @update:modelValue="buscarResumoNegociacao"></v-select>
         </div>
-      </v-col>
-      <v-col offset="2">
-        <v-icon class="me-2">mdi-filter</v-icon>
       </v-col>
     </v-row>
     <v-row>

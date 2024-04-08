@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { get } from "@/services/api"
-import {type ResumoAnos} from "@/models/ResumoAnos"
+import { type ResumoAnos } from "@/models/ResumoAnos"
+import notificar from '@/services/notificar';
 
 const props = defineProps({
     investimento_id: {
@@ -49,20 +50,33 @@ const show_view = ref(false)
 const show_relatorio = ref(false)
 const relatorio = ref('')
 const dialog_relatorio = ref(false)
+const dialog_notas_negociacao = ref()
 const investimento_administradora = ref()
+const resumo_negociacoes = ref()
 
 //functions
 function gerarRelatorio() {
     get(`api/administradora/${props.investimento_id}`, {})
-    .then(response => {
-        let total_em_cotas = props.saldo_compra_cotas - props.saldo_venda_cotas
-        investimento_administradora.value = response.data
-        relatorio.value = `Total de ${total_em_cotas} cotas com preço médio de ${props.preco_medio} R$. 
+        .then(response => {
+            let total_em_cotas = props.saldo_compra_cotas - props.saldo_venda_cotas
+            investimento_administradora.value = response.data
+            relatorio.value = `Total de ${total_em_cotas} cotas com preço médio de ${props.preco_medio} R$. 
         Investimento total de  ${props.saldo} R$ sob a custódia de ${investimento_administradora.value.administradora.nome}
         no cnpj ${investimento_administradora.value.administradora.cnpj}`
-        dialog_relatorio.value = true
-    })
+            dialog_relatorio.value = true
+        })
 
+}
+
+function buscarNotasNegociacao() {
+    dialog_notas_negociacao.value = true
+    get(`api/resumo-negociacao/buscar-resumo-negociacao`, { investimento_id: props.investimento_id, ano: props.ano })
+        .then(res => {
+            resumo_negociacoes.value = res.data
+        })
+        .catch(err => {
+            notificar('error', err.response.data)
+        })
 }
 
 </script>
@@ -104,7 +118,7 @@ function gerarRelatorio() {
                 <v-card-text>
                     <v-tooltip v-model="show_view" location="top">
                         <template v-slot:activator="{ props }">
-                            <v-btn icon v-bind="props"  >
+                            <v-btn icon v-bind="props" @click="buscarNotasNegociacao()">
                                 <v-icon color="grey-lighten-1">
                                     mdi-eye
                                 </v-icon>
@@ -126,35 +140,55 @@ function gerarRelatorio() {
             </v-col>
         </v-row>
     </v-card>
-    <v-dialog
-      v-model="dialog_relatorio"
-      width="auto"
-    >
-      <v-card
-        max-width="400"
-        prepend-icon="mdi-laptop"
-        :text="relatorio"
-        title="Relatório para o imposto de renda"
-      >
-        <template v-slot:actions>
-          <v-btn
-            class="ms-auto"
-            text="Ok"
-            @click="dialog_relatorio = false"
-          ></v-btn>
-        </template>
-      </v-card>
+    <v-dialog v-model="dialog_relatorio" width="auto">
+        <v-card width="400" prepend-icon="mdi-laptop" :text="relatorio" title="Relatório para o imposto de renda">
+            <template v-slot:actions>
+                <v-btn class="ms-auto" text="Ok" @click="dialog_relatorio = false"></v-btn>
+            </template>
+        </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialog_notas_negociacao" width="auto">
+        <v-card width="500" prepend-icon="mdi-laptop" :text="relatorio" title="Notas de negociação">
+            <v-row>
+                <v-col offset="1">
+                    <v-card width="400" v-for="(resumo_negociacao, index) in resumo_negociacoes" :key="index"
+                        class="mb-3">
+                        <v-card-title class="card-notas-header">
+                            <p>Data de negociação: {{ resumo_negociacao.data_negociacao }}</p>
+                        </v-card-title>
+                        <v-divider></v-divider>
+                        <v-card-text>
+                            <p v-if="resumo_negociacao.total_comprado > 0">Total comprado em R$: {{
+                        resumo_negociacao.total_comprado }}</p>
+                            <p v-if="resumo_negociacao.total_vendido > 0">Total vendido em R$: {{
+                        resumo_negociacao.total_vendido }}</p>
+                            <p v-if="resumo_negociacao.qnt_cotas_comprada > 0">Total de cotas compradas: {{
+                        resumo_negociacao.qnt_cotas_comprada }}</p>
+                            <p v-if="resumo_negociacao.qnt_cotas_vendida">Total de cotas vendidas: {{
+                        resumo_negociacao.qnt_cotas_vendida }}</p>
+                        <p>Preço: {{ resumo_negociacao.valor_ativo }}</p>
+                        </v-card-text>
+                    </v-card>
+                </v-col>
+            </v-row>
+        </v-card>
     </v-dialog>
 </template>
 
 <style scoped lang="scss">
 .card-header {
-  background-color: rgb(54, 145, 231);
-  color: white;
+    background-color: rgb(54, 145, 231);
+    color: white;
 }
 
 .saldos {
     display: flex;
     flex-direction: row;
+}
+
+.card-notas-header {
+    background-color: rgb(49, 4, 49);
+    color: white;
 }
 </style>

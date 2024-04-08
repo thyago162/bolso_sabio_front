@@ -17,7 +17,7 @@ function realizarLogin() {
   login('oauth/token', {
     grant_type: 'password',
     client_id: '2',
-    client_secret: 'V11sUXcZAjyvb2dbBwph7k1yQ1MziCqeHLTuPzeQ',
+    client_secret: 'UmkPoK31Ehqo7S1uTTRjjlh2dGhzwTSW3L15ksBi',
     username: email.value,
     password: password.value,
   }).then(response => {

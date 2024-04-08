@@ -150,9 +150,9 @@ function getTiposInvestimento() {
   }
 }
 
-function getCategoria() {
-  if (form.value.tipo_investimento_id) {
-    get('api/categoria', { tipo_investimento_id: form.value.tipo_investimento_id })
+function getCategoria(tipo_investimento_id: any) {
+  form.value.tipo_investimento_id = tipo_investimento_id
+  get('api/categoria', { tipo_investimento_id: tipo_investimento_id })
       .then(res => {
         let categoria = res.data
         form.value.categoria_id = categoria.id
@@ -160,17 +160,16 @@ function getCategoria() {
       .catch(err => {
         notificar('error', err.response.data.message)
       })
-  }
 }
 </script>
 
 <template>
   <v-container>
     <v-row class="mt-3">
-      <v-col offset="1" cols="6">
+      <v-col offset="1" offset-lg="2" cols="6">
         <h2>Meus investimentos</h2>
       </v-col>
-      <v-col offset="2" cols="2">
+      <v-col offset="2" offset-lg="2" cols="2">
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ props }">
             <v-btn width="500px" dark color="blue-darken-1" v-bind="props">NOVO</v-btn>
@@ -192,8 +191,8 @@ function getCategoria() {
                     <v-text-field v-model="form.descricao" density="comfortable" variant="underlined"
                       label="Descrição"></v-text-field>
                     <v-select v-if="tipos_investimento" :item-title="'nome'" :item-value="'id'" variant='underlined'
-                      label="Tipo de investimento" :items="tipos_investimento" v-model="form.tipo_investimento_id"
-                      :update:focused="getCategoria()"></v-select>
+                      label="Tipo de investimento" :items="tipos_investimento"
+                      @update:modelValue="getCategoria"></v-select>
                     <v-text-field v-model="form.taxa_negociada" density="comfortable" variant="underlined"
                       label="Taxa negociada"></v-text-field>
                     <v-text-field type="date" v-model="form.vencimento" density="comfortable" variant="underlined"
@@ -251,7 +250,7 @@ function getCategoria() {
       </v-col>
     </v-row>
     <v-row class="mt-5">
-      <v-col offset="1">
+      <v-col offset="1" offset-lg="2">
         <v-icon class="me-2" @click="alterarTipoVisualizacao('tabela')">mdi-table</v-icon>
         <v-icon class="me-2" @click="alterarTipoVisualizacao('card')">mdi-menu</v-icon>
       </v-col>
@@ -266,12 +265,12 @@ function getCategoria() {
           :tipo_renda="investimento.tipo_investimento.tipo_renda"
           :vencimento="investimento.vencimento"></card-investimento>
       </v-col>
-      <v-col v-else>
+      <v-col offset-lg="2" v-else>
         <TabelaInvestimentos @paginar-tabela="atualizarTabela" :investimentos="investimentos"></TabelaInvestimentos>
       </v-col>
     </v-row>
     <v-row v-else class="mt-5">
-      <v-col offset="1">
+      <v-col offset="1" offset-lg="2">
         <p>Nenhum dado encontrado...</p>
       </v-col>
     </v-row>
