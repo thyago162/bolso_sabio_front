@@ -11,12 +11,8 @@
       </v-app-bar-nav-icon>
     </template>
     <template v-slot:append>
-      <v-btn>
-        <router-link to="login">Login</router-link>
-      </v-btn>
-      <v-btn>
-        <router-link to="cadastro">Registro</router-link>
-      </v-btn>
+      <v-btn to="/login">Login</v-btn>
+      <v-btn to="/cadastro">Cadastro</v-btn>
     </template>
   </v-app-bar>
 </template>

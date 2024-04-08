@@ -2,8 +2,12 @@
 import MenuLogin from '@/components/Menu/MenuLogin.vue'
 </script>
 <template>
-  <menu-login></menu-login>
   <v-container fluid class="container">
+    <v-row>
+      <v-col>
+        <menu-login></menu-login>
+      </v-col>
+    </v-row>
     <v-row class="info-investimentos mt-4 ml-3">
       <v-col cols="3">
         <h1>Acompanhe seus <span>i</span>nvestimentos</h1>

@@ -1,6 +1,7 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 800,
@@ -9,6 +10,8 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js"),
     },
   });
+  win.maximize()
+  win.show()
 
   win.loadFile("dist/index.html");
 }
@@ -22,6 +25,8 @@ app.whenReady().then(() => {
     }
   });
 });
+
+app.userAgentFallback()
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
