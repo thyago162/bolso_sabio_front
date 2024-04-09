@@ -31,7 +31,7 @@ export const cpfRules = [
     },
 
     (value: any) => {
-        return value?.length == 11 ? true : 'Cpf inválido'
+        return value?.length == 14 ? true : 'Cpf inválido'
     }
 ]
 
@@ -51,7 +51,7 @@ export const telefoneRules = [
     },
 
     (value: any) => {
-        return value?.length == 9 ? true : 'Telefone com formato inválido'
+        return value?.length == 10 ? true : 'Telefone com formato inválido'
     }
 ]
 

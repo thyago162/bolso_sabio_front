@@ -6,6 +6,8 @@ import { ref } from 'vue'
 import notificar from '@/services/notificar'
 import TabelaInvestimentos from '@/components/Tabela/TabelaInvestimentos.vue'
 import CardInfoInvestimento from '@/components/Card/CardInfoInvestimento.vue'
+import { vMaska } from "maska";
+import masks from '@/composables/Masks/masks'
 
 //data
 const dialog_delete = ref()
@@ -198,13 +200,28 @@ function getCategoria(tipo_investimento_id: any) {
                     <v-text-field type="date" v-model="form.vencimento" density="comfortable" variant="underlined"
                       label="Vencimento"></v-text-field>
                     <v-text-field v-model="form.quantidade" density="comfortable" variant="underlined"
-                      label="Quantidade"></v-text-field>
-                    <v-text-field v-model="form.valor_investido" density="comfortable" variant="underlined"
-                      label="Valor investido"></v-text-field>
-                    <v-text-field v-model="form.valor_bruto" density="comfortable" variant="underlined"
-                      label="Valor bruto"></v-text-field>
-                    <v-text-field v-model="form.valor_liquido" density="comfortable" variant="underlined"
-                      label="Valor liquido"></v-text-field>
+                      label="Quantidade" type="number"></v-text-field>
+                    <v-text-field 
+                      v-model="form.valor_investido" 
+                      density="comfortable" 
+                      variant="underlined"
+                      label="Valor investido" 
+                      v-maska:[masks.money]
+                    ></v-text-field>
+                    <v-text-field 
+                      v-model="form.valor_bruto" 
+                      density="comfortable" 
+                      variant="underlined" 
+                      label="Valor bruto" 
+                      v-maska:[masks.money]
+                    ></v-text-field>
+                    <v-text-field 
+                      v-model="form.valor_liquido" 
+                      density="comfortable" 
+                      variant="underlined"
+                      label="Valor liquido" 
+                      v-maska:[masks.money]
+                    ></v-text-field>
                   </div>
                   <div v-else>
                     <v-text-field v-model="form.descricao" append-icon="mdi-magnify" density="comfortable"
@@ -217,7 +234,7 @@ function getCategoria(tipo_investimento_id: any) {
                       <v-text-field v-model="form.preco" density="comfortable" variant="underlined" label="Preço"
                         :readonly="true"></v-text-field>
                       <v-text-field v-model="form.quantidade" density="comfortable" variant="underlined"
-                        label="Quantidade"></v-text-field>
+                        label="Quantidade" type="number"></v-text-field>
                     </div>
                   </div>
                 </v-form>

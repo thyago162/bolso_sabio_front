@@ -3,6 +3,8 @@ import { ref } from 'vue'
 import { cadastrar } from '@/services/api'
 import { useRouter } from 'vue-router'
 import notificar from '@/services/notificar'
+import { vMaska } from "maska";
+import masks from '@/composables/Masks/masks'
 import {
   nomeCompletoRules,
   emailRules,
@@ -66,16 +68,14 @@ function realizarCadastro() {
       <v-text-field v-model="form.email" :rules="emailRules" :counter="50" label="Email" required class="input"
         type="email"></v-text-field>
 
-      <v-text-field v-model="form.cpf" :counter="11" :rules="cpfRules" label="Cpf" required
-        hint="Apenas números"></v-text-field>
+      <v-text-field v-model="form.cpf" :counter="14" :rules="cpfRules" label="Cpf" required v-maska:[masks.cpf] ></v-text-field>
       <v-row>
         <v-col cols="4">
-          <v-text-field v-model="form.ddd" :rules="dddRules" :counter="2" label="DDD" required class="input"
-            hint="Apenas números"></v-text-field>
+          <v-text-field v-model="form.ddd" :rules="dddRules" :counter="4" label="DDD" required class="input" ></v-text-field>
         </v-col>
         <v-col>
-          <v-text-field v-model="form.telefone" :rules="telefoneRules" :counter="9" label="Número Telefone" required
-            class="input" hint="Apenas números"></v-text-field>
+          <v-text-field v-model="form.telefone" :rules="telefoneRules" :counter="10" label="Número Telefone" required
+            class="input" v-maska:[masks.fone]></v-text-field>
         </v-col>
       </v-row>
 

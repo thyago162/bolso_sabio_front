@@ -5,6 +5,8 @@ import { get, create } from '@/services/api'
 import { ref } from 'vue';
 import { onBeforeMount } from 'vue';
 import notificar from '@/services/notificar';
+import { vMaska } from "maska";
+import masks from '@/composables/Masks/masks'
 
 const dialog = ref()
 const loading = ref(false)
@@ -142,12 +144,12 @@ function buscarInvestimento(tipo_investimento_id: any) {
                     <v-select label="Nome do ativo" v-model="form.investimento_id" variant="underlined"
                       :items="investimentos" :item-value="'id'" :item-title="'descricao'"></v-select>
                     <section v-if="tipo_acao == 'compra'">
-                      <v-text-field label="Quantidade" v-model="form.qnt_cotas_comprada"></v-text-field>
-                      <v-text-field label="Preço de compra" v-model="form.valor_ativo"></v-text-field>
+                      <v-text-field label="Quantidade" v-model="form.qnt_cotas_comprada" type="number"></v-text-field>
+                      <v-text-field v-maska:[masks.money] label="Preço de compra" v-model="form.valor_ativo"></v-text-field>
                     </section>
                     <section v-else>
                       <v-text-field label="Quantidade" v-model="form.qnt_cotas_vendida"></v-text-field>
-                      <v-text-field label="Preço de venda" v-model="form.valor_ativo"></v-text-field>
+                      <v-text-field v-maska:[masks.money] label="Preço de venda" v-model="form.valor_ativo"></v-text-field>
                     </section>
                     <v-text-field type="date" v-model="form.data_negociacao" density="comfortable" variant="underlined"
                       label="Data de negociação"></v-text-field>
