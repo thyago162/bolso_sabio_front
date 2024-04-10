@@ -48,7 +48,7 @@ function realizarCadastro() {
     if (err.response.status === 422) {
       notificar('error', err.response.data.message)
     } else {
-      notificar('error', err.response.data)
+      notificar('error', err.response.data.message)
     }
   })
 }

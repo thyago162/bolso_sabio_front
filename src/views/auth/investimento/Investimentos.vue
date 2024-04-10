@@ -243,9 +243,9 @@ function getCategoria(tipo_investimento_id: any) {
                 <info-importacao tipo_importacao="Custódia"></info-importacao>
                 <v-form enctype="multipart/form-data">
                   <v-file-input label="Clique ou arraste" density="compact" v-model="file" class="mt-5"></v-file-input>
-                  <div v-if="loading">
+                  <div>
                     <div class="text-center">
-                      <span v-if="loading == true">Importando...</span>
+                      <span v-if="loading">Importando...</span>
                       <span v-else>Importado com sucesso</span>
                     </div>
                     <div class="text-center">

@@ -11,14 +11,14 @@ const data = ref({
   labels: [],
   datasets: [
     {
-      backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+      backgroundColor: ['#FF8C00', '#8A2BE2', '#00FF7F', '#20B2AA', '#4682B4', '#A52A2A'],
       data: []
     }
   ]
 })
 const options = {
   responsive: true,
-  maintainAspectRatio: false
+  maintainAspectRatio: false,
 }
 
 onBeforeMount(()=> {
@@ -28,12 +28,8 @@ onBeforeMount(()=> {
 function buscarDados() {
     get('/api/carteira/total-por-tipo-investimento', {})
     .then(res => {
-        console.log(res.data.label)
         data.value.labels = res.data.label
         data.value.datasets[0].data = res.data.valores
-        console.log(data.value)
-        
-        //data.value.datasets.data = data.valores
     })
     .catch(err => {
         notificar('error', err.response.data.message)

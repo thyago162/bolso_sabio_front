@@ -8,7 +8,7 @@ const props = defineProps({
     },
 })
 
-const dialog_investimento = defineModel('dialog_investimento')
+const dialog_investimento:any = defineModel('dialog_investimento')
 
 const rendimento = computed(() => {
   if (props.investimento) {

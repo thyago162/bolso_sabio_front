@@ -50,7 +50,7 @@ function buscarResumoNegociacao(ano: string) {
     .then(res => {
       resumo_negociacoes.value = res.data
     }).catch(err => {
-      notificar('error', err.response.data)
+      notificar('error', err.response.data.message)
     })
 }
 
@@ -60,7 +60,7 @@ function getTipoInvestimento() {
       tipo_investimentos.value = res.data
     })
     .catch(err => {
-      notificar('error', err.response.data)
+      notificar('error', err.response.data.message)
     })
 }
 
@@ -98,7 +98,7 @@ function importar() {
       dialog.value = false
       notificar('success', 'Importação concluída')
     }).catch(err => {
-      notificar('error', err.response.data)
+      notificar('error', err.response.data.message)
     })
 }
 
@@ -109,7 +109,7 @@ function buscarInvestimento(tipo_investimento_id: any) {
       investimentos.value = res.data
     })
     .catch(err => {
-      notificar('error', err.response.data)
+      notificar('error', err.response.data.message)
     })
 }
 </script>

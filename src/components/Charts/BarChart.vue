@@ -1,21 +1,42 @@
 <script setup lang="ts">
 import { Bar } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+import { onBeforeMount, ref } from 'vue'
+import { get } from '@/services/api'
+import notificar from '@/services/notificar';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
-const chartData = {
-    labels: ['2022', '2023', '2024'],
-    datasets: [ { data: [40, 20, 12] } ]
-}
+const data:any = ref({labels: [], datasets: []})
+
 const chartOptions = {
-    responsive: true
+    responsive: true,
+}
+
+onBeforeMount(()=> {
+    buscarDados()
+})
+
+function buscarDados() {
+    get('/api/carteira/total-por-ano', {})
+    .then(res => {
+        let dataset = res.data['datasets']
+        data.value.labels = res.data['labels']
+        for(let prop in dataset) {
+            data.value.datasets.push(dataset[prop])
+        }
+        
+    })
+    .catch(err => {
+        notificar('error', err.response.data.message)
+    })
 }
 </script>
 <template>
      <Bar
+        v-if="data.labels.length > 0"
         id="my-chart-id"
         :options="chartOptions"
-        :data="chartData"
+        :data="data"
     />
 </template>

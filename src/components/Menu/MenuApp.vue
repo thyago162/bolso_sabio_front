@@ -4,7 +4,7 @@ import { useAuthStore } from '@/stores/auth';
 
 //VARIÁVEIS
 const authStore = useAuthStore()
-const user = authStore.getUser
+const user:any = authStore.getUser
 const router = useRouter()
 
 function sair() {

@@ -24,7 +24,7 @@ function usuarioAutenticado() {
             authStore.setUser(res.data)
         })
         .catch(err => {
-            notificar('error', err.response.data)
+            notificar('error', err.response.data.message)
         })
 }
 
@@ -37,23 +37,23 @@ function dadosCarteira() {
 </script>
 <template>
     <v-container>
-        <v-row>
+        <v-row class="mt-5">
             <v-col offset="2" cols="9">
                 <v-card class="mx-auto">
                     <v-row>
                         <v-col >
                             <v-card-title>
-                                <h4>Minha carteira: R$ {{ Math.round(carteira).toFixed(2) }}</h4>
+                                <h4 class="carteira">Minha carteira: R$ {{ Math.round(carteira).toFixed(2) }}</h4>
                             </v-card-title>
                         </v-col>
                     </v-row>
                     <v-row>
-                        <v-col cols="5">
+                        <v-col cols="6">
                             <pie-chart></pie-chart>
                         </v-col>
                     </v-row>
                     <v-row>
-                        <v-col cols="5">
+                        <v-col cols="6">
                             <bar-chart></bar-chart>
                         </v-col>
                     </v-row>
@@ -62,3 +62,10 @@ function dadosCarteira() {
         </v-row>
     </v-container>
 </template>
+
+<style scoped>
+.carteira {
+    text-align: start;
+    margin-left: 30px;
+}
+</style>

@@ -11,7 +11,7 @@ const props = defineProps({
     }
 })
 
-const headers = ref([
+const headers:any = ref([
     {
         title: 'Descrição',
         align: 'end',
@@ -47,7 +47,7 @@ function visualizar(item: any) {
             <v-data-table-server v-model:items-per-page="props.investimentos.per_page" :headers="headers"
                 :items="props.investimentos.data" :items-length="totalItems" :loading="loading" item-value="name"
                 @update:options="loadItems">
-                <template v-slot:item.actions="{ item }">
+                <template v-slot:[`item.actions`]="{ item }">
                     <v-icon size="small" @click="visualizar(item)">
                         mdi-eye
                     </v-icon>                    
