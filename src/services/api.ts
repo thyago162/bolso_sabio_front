@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia'
 const authStore = storeToRefs(useAuthStore())
 const token = sessionStorage.getItem('token')
 const api = axios.create({
-  baseURL: 'https://85.31.63.119/'
+  baseURL: 'http://85.31.63.119:8000/'
 })
 
 export async function get(url: string, params: object) {

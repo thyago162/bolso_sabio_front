@@ -27,7 +27,6 @@ app.whenReady().then(() => {
   });
 });
 
-app.userAgentFallback()
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
