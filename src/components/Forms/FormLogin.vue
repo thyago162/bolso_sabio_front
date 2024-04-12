@@ -18,7 +18,7 @@ function realizarLogin() {
   login('oauth/token', {
     grant_type: 'password',
     client_id: '2',
-    client_secret: 'UzjtbnIBtEUq8bdb3TWUX7wtkgCLNmiSOTFRshGd',
+    client_secret: import.meta.env.VITE_API_KEY,
     username: email.value,
     password: password.value,
   }).then(response => {

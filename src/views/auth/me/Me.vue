@@ -37,7 +37,7 @@ function usuarioAutenticado() {
 
 function salvar() {
     create('api/user', { user: user.value, endereco: form.endereco.value })
-        .then(res => {
+        .then(() => {
             notificar('success', 'Registro salvo com sucesso')
         })
         .catch(err => {

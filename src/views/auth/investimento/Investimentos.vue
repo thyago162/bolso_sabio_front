@@ -56,7 +56,7 @@ function buscarInvestimentos() {
     .then(response => {
       investimentos.value = response.data
     }).catch(err => {
-      alert(err.response)
+      notificar('error',  err.response.data.message)
     })
 }
 
