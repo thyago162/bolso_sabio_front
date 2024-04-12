@@ -24,6 +24,7 @@ export const useAuthStore = defineStore('auth', {
     },
     actions: {
         setUser(user:any) {
+            console.log(user)
             this.user = user
         },
 

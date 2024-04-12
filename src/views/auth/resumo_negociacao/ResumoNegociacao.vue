@@ -75,6 +75,8 @@ function executar() {
   } else {
     importar()
   }
+  
+  buscarAnos()
 }
 
 function salvar() {
@@ -84,12 +86,11 @@ function salvar() {
       dialog.value = false
       notificar('success', 'Registro salvo com sucesso')
     }).catch(err => {
-      notificar('error', err.response.data)
+      notificar('error', err.response.data.message)
     })
 }
 
 function importar() {
-
   let formData = new FormData
   formData.append('resumo_negociacao', file.value[0], file.value[0].name)
   create('api/resumo-negociacao/importar', formData)

@@ -7,7 +7,7 @@ export default function notificar(icon: string, text: string) {
     $toast.open({
         type: icon,
         message: text,
-        position: 'top',
+        position: 'top-right',
         duration: 5000
       })
 }

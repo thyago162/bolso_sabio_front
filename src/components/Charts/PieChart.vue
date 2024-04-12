@@ -11,7 +11,7 @@ const data = ref({
   labels: [],
   datasets: [
     {
-      backgroundColor: ['#FF8C00', '#8A2BE2', '#00FF7F', '#20B2AA', '#4682B4', '#A52A2A'],
+      backgroundColor: [],
       data: []
     }
   ]
@@ -30,6 +30,7 @@ function buscarDados() {
     .then(res => {
         data.value.labels = res.data.label
         data.value.datasets[0].data = res.data.valores
+        data.value.datasets[0].backgroundColor = res.data.cores
     })
     .catch(err => {
         notificar('error', err.response.data.message)

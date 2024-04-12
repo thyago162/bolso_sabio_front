@@ -11,13 +11,14 @@ const email = ref('')
 const password = ref('')
 const authStore = useAuthStore()
 const router = useRouter()
+const show_pass = ref(false)
 
 //FUNÇÕES
 function realizarLogin() {
   login('oauth/token', {
     grant_type: 'password',
     client_id: '2',
-    client_secret: 'UmkPoK31Ehqo7S1uTTRjjlh2dGhzwTSW3L15ksBi',
+    client_secret: 'UzjtbnIBtEUq8bdb3TWUX7wtkgCLNmiSOTFRshGd',
     username: email.value,
     password: password.value,
   }).then(response => {
@@ -42,9 +43,19 @@ function realizarLogin() {
       <v-text-field v-model="email" :counter="50" label="Email" required hide-details class="input"
         type="email"></v-text-field>
 
-      <v-text-field v-model="password" :counter="32" label="Senha" required hide-details type="password"></v-text-field>
+      <v-text-field 
+        v-model="password" 
+        :counter="32" 
+        label="Senha" 
+        required 
+        hide-details 
+        :type="show_pass ? 'text' : 'password'" 
+        class="input" 
+        :append-icon="show_pass ? 'mdi-eye' : 'mdi-eye-off'"
+        @click:append="show_pass = !show_pass"
+      ></v-text-field>
       <div class="submenu mt-5">
-        <v-btn type="submit" color="indigo" density="comfortable" @click="realizarLogin" width="250px">Entrar</v-btn>
+        <v-btn color="indigo" density="comfortable" @click="realizarLogin" width="250px">Entrar</v-btn>
         <router-link to="/" class="ml-5">Esqueceu a senha?</router-link>
       </div>
       <v-btn block class="mt-5" size="x-large" rounded="lg"

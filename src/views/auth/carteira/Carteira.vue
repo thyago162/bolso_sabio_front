@@ -20,7 +20,6 @@ onBeforeMount(() => {
 function usuarioAutenticado() {
     get('api/usuario-autenticado', {})
         .then(res => {
-            console.log(res.data)
             authStore.setUser(res.data)
         })
         .catch(err => {
